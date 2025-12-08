@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    background: #111;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.video-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+video {
+    width: 100%;
+    border-radius: 10px;
+    background: black;
+}
+
+/* Buttons */
+.controls {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background: #ff4444;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+select {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+</style>
+
+</head>
+<body>
+
+<h2>Bangkera</h2>
+
+<div class="video-container">
+    <video id="player" controls playsinline webkit-playsinline>
+        <source src="https://ia801009.us.archive.org/31/items/bangkera_202509/Bangkera%202025.ia.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+</div>
+
+<div class="controls">
+    <button id="fsBtn">Fullscreen</button>
+
+    <select id="speed">
+        <option value="1">Speed: Normal</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+    </select>
+</div>
+
+<script>
+// =========================
+// ⭐ Prevent Screen Sleep
+// =========================
+let video = document.getElementById("player");
+let wakeLock = null;
+
+async function requestWakeLock() {
+    try {
+        wakeLock = await navigator.wakeLock.request("screen");
+        wakeLock.addEventListener("release", () => {
+            console.log("Wake Lock Released");
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+video.addEventListener("play", requestWakeLock);
+video.addEventListener("pause", () => wakeLock && wakeLock.release());
+video.addEventListener("ended", () => wakeLock && wakeLock.release());
+
+// =========================
+// ⭐ Fullscreen Button
+// =========================
+document.getElementById("fsBtn").onclick = () => {
+    if (video.requestFullscreen) video.requestFullscreen();
+    else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+};
+
+// =========================
+// ⭐ Playback Speed
+// =========================
+document.getElementById("speed").onchange = function () {
+    video.playbackRate = this.value;
+};
+</script>
+
+</body>
+</html>
