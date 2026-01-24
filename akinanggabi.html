@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,19 +5,167 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akin ang Gabi</title>
 <style>
+/* ============================================
+   TIMER PAGE STYLES
+============================================ */
+.timer-page {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.timer-container {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.timer-title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.timer-subtitle {
+    font-size: 18px;
+    color: #ddd;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.timer-display {
+    font-size: 72px;
+    font-weight: 700;
+    margin: 30px 0;
+    text-shadow: 0 0 20px rgba(255, 65, 108, 0.7);
+    color: #fff;
+}
+
+.timer-label {
+    font-size: 20px;
+    color: #96c93d;
+    margin-bottom: 40px;
+}
+
+.watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 40px;
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(to right, #8E2DE2, #4A00E0);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(142, 45, 226, 0.4);
+    margin: 20px 0;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.watch-btn.active {
+    opacity: 1;
+    pointer-events: auto;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+    animation: pulse 2s infinite;
+}
+
+.watch-btn.active:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 65, 108, 0.6);
+}
+
+.watch-btn:active {
+    transform: translateY(0);
+}
+
+.watch-btn i {
+    font-size: 24px;
+}
+
+.skip-note {
+    color: #aaa;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.timer-status {
+    font-size: 18px;
+    margin-top: 20px;
+    min-height: 27px;
+    color: #96c93d;
+}
+
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin: 30px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    width: 0%;
+    border-radius: 4px;
+    transition: width 1s linear;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(255, 65, 108, 0.7);
+    }
+    100% {
+        box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+    }
+}
+
+/* ============================================
+   VIDEO PLAYER PAGE STYLES (Hidden Initially)
+============================================ */
+.video-page {
+    display: none;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    padding: 20px;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
 }
 
 /* Header with Home Button */
@@ -202,6 +349,14 @@ select option {
         max-width: 300px;
         justify-content: center;
     }
+    
+    .timer-display {
+        font-size: 60px;
+    }
+    
+    .timer-title {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -221,71 +376,182 @@ select option {
     .movie-overview p {
         font-size: 15px;
     }
+    
+    .timer-display {
+        font-size: 48px;
+    }
+    
+    .timer-title {
+        font-size: 24px;
+    }
+    
+    .timer-container {
+        padding: 30px 20px;
+    }
+    
+    .watch-btn {
+        padding: 15px 30px;
+        font-size: 18px;
+    }
 }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div class="header">
-    <div class="logo-area">
-        <button class="home-btn" id="homeBtn">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
+<!-- ============================================
+     TIMER PAGE (Visible Initially)
+============================================ -->
+<div class="timer-page" id="timerPage">
+    <div class="timer-container">
+        <h1 class="timer-title">Akin ang Gabi</h1>
+        <p class="timer-subtitle">Get ready to watch the full movie. Please wait for the timer to complete, then click the "Watch Now" button.</p>
+        
+        <div class="timer-display" id="timer">5</div>
+        <p class="timer-label">Seconds Remaining</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <button class="watch-btn" id="watchBtn">
+            <i class="fas fa-play-circle"></i>
+            <span>Watch Now</span>
         </button>
+        
+        <p class="skip-note">Button will be enabled after the timer reaches zero</p>
+        <p class="timer-status" id="timerStatus">Please wait...</p>
     </div>
-    <h1>Akin ang Gabi</h1>
-    <div class="logo-area"></div> <!-- Empty for symmetry -->
 </div>
 
-<div class="video-container">
-    <video id="player" controls playsinline webkit-playsinline>
-        <source src="https://ia601703.us.archive.org/19/items/akin.-ang.-gabi.-2025-1080p/Akin.Ang.Gabi.2025-1080p.ia.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-</div>
+<!-- ============================================
+     VIDEO PLAYER PAGE (Hidden Initially)
+============================================ -->
+<div class="video-page" id="videoPage">
+    <div class="header">
+        <div class="logo-area">
+            <button class="home-btn" id="homeBtn">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+        </div>
+        <h1>Akin ang Gabi</h1>
+        <div class="logo-area"></div> <!-- Empty for symmetry -->
+    </div>
 
-<div class="controls">
-    <button class="control-btn" id="fsBtn">
-        <i class="fas fa-expand"></i>
-        <span>Fullscreen</span>
-    </button>
+    <div class="video-container">
+        <video id="player" controls playsinline webkit-playsinline>
+            <source src="https://ia601703.us.archive.org/19/items/akin.-ang.-gabi.-2025-1080p/Akin.Ang.Gabi.2025-1080p.ia.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
 
-    <select id="speed">
-        <option value="1">Speed: Normal</option>
-        <option value="0.5">0.5x (Slow)</option>
-        <option value="1.25">1.25x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2">2x (Fast)</option>
-    </select>
-</div>
+    <div class="controls">
+        <button class="control-btn" id="fsBtn">
+            <i class="fas fa-expand"></i>
+            <span>Fullscreen</span>
+        </button>
 
-<div class="movie-overview">
-    <h3><i class="fas fa-film"></i> Movie Overview</h3>
-    <p>A shy woman discovers her sensual power after meeting her dream guy. As she explores newfound confidence and desire, her bold choices lead to unexpected consequences that threaten everything she's built.</p>
+        <select id="speed">
+            <option value="1">Speed: Normal</option>
+            <option value="0.5">0.5x (Slow)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x (Fast)</option>
+        </select>
+    </div>
+
+    <div class="movie-overview">
+        <h3><i class="fas fa-film"></i> Movie Overview</h3>
+        <p>A shy woman discovers her sensual power after meeting her dream guy. As she explores newfound confidence and desire, her bold choices lead to unexpected consequences that threaten everything she's built.</p>
+    </div>
 </div>
 
 <script>
-// =========================
-// ⭐ Variables
-// =========================
-const video = document.getElementById("player");
+// ============================================
+// TIMER PAGE FUNCTIONALITY
+// ============================================
+const timerPage = document.getElementById('timerPage');
+const videoPage = document.getElementById('videoPage');
+const timerDisplay = document.getElementById('timer');
+const watchBtn = document.getElementById('watchBtn');
+const timerStatus = document.getElementById('timerStatus');
+const progressBar = document.getElementById('progressBar');
+let countdown = 5;
+let timerInterval;
+
+function startTimer() {
+    // Initial setup
+    timerDisplay.textContent = countdown;
+    progressBar.style.width = '0%';
+    
+    // Start the timer
+    timerInterval = setInterval(() => {
+        countdown--;
+        timerDisplay.textContent = countdown;
+        
+        // Update progress bar
+        const progress = ((5 - countdown) / 5) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        // When timer reaches 0
+        if (countdown <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = '0';
+            progressBar.style.width = '100%';
+            enableWatchButton();
+        }
+    }, 1000);
+}
+
+function enableWatchButton() {
+    watchBtn.classList.add('active');
+    timerStatus.textContent = 'Ready! Click "Watch Now" to proceed';
+    
+    // Add click event to button
+    watchBtn.addEventListener('click', function() {
+        // Open ad in new tab (REPLACE WITH YOUR ACTUAL AD URL)
+        window.open('https://example.com/ads', '_blank');
+        
+        // Show video page and hide timer page
+        timerPage.style.display = 'none';
+        videoPage.style.display = 'block';
+        
+        // Start video playback
+        setTimeout(() => {
+            if (videoPlayer && typeof videoPlayer.play === 'function') {
+                videoPlayer.play().catch(e => console.log('Auto-play prevented:', e));
+            }
+        }, 500);
+    });
+}
+
+// Start timer when page loads
+window.addEventListener('load', startTimer);
+
+// Keyboard shortcut (Enter key)
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && watchBtn.classList.contains('active')) {
+        e.preventDefault();
+        watchBtn.click();
+    }
+});
+
+// ============================================
+// VIDEO PLAYER FUNCTIONALITY
+// ============================================
+const videoPlayer = document.getElementById("player");
 const homeBtn = document.getElementById("homeBtn");
 const fsBtn = document.getElementById("fsBtn");
 const speedSelect = document.getElementById("speed");
 let wakeLock = null;
 
-// =========================
-// ⭐ Home Button Functionality - FIXED
-// =========================
+// Home Button Functionality
 homeBtn.addEventListener("click", function() {
-    // Remove the alert and uncomment the actual navigation line
-    window.location.href = "https://watch.boldilocks.xyz/";
+    window.location.href = "https://www.boldilocks.xyz/";
 });
 
-// =========================
-// ⭐ Prevent Screen Sleep
-// =========================
+// Prevent Screen Sleep
 async function requestWakeLock() {
     if ('wakeLock' in navigator) {
         try {
@@ -297,9 +563,9 @@ async function requestWakeLock() {
     }
 }
 
-video.addEventListener("play", requestWakeLock);
+videoPlayer.addEventListener("play", requestWakeLock);
 
-video.addEventListener("pause", () => {
+videoPlayer.addEventListener("pause", () => {
     if (wakeLock !== null) {
         wakeLock.release();
         wakeLock = null;
@@ -307,7 +573,7 @@ video.addEventListener("pause", () => {
     }
 });
 
-video.addEventListener("ended", () => {
+videoPlayer.addEventListener("ended", () => {
     if (wakeLock !== null) {
         wakeLock.release();
         wakeLock = null;
@@ -315,26 +581,22 @@ video.addEventListener("ended", () => {
     }
 });
 
-// =========================
-// ⭐ Fullscreen Button
-// =========================
+// Fullscreen Button
 fsBtn.addEventListener("click", () => {
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-    } else if (video.mozRequestFullScreen) {
-        video.mozRequestFullScreen();
-    } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+    if (videoPlayer.requestFullscreen) {
+        videoPlayer.requestFullscreen();
+    } else if (videoPlayer.webkitRequestFullscreen) {
+        videoPlayer.webkitRequestFullscreen();
+    } else if (videoPlayer.mozRequestFullScreen) {
+        videoPlayer.mozRequestFullScreen();
+    } else if (videoPlayer.msRequestFullscreen) {
+        videoPlayer.msRequestFullscreen();
     }
 });
 
-// =========================
-// ⭐ Playback Speed
-// =========================
+// Playback Speed
 speedSelect.addEventListener("change", function() {
-    video.playbackRate = parseFloat(this.value);
+    videoPlayer.playbackRate = parseFloat(this.value);
     
     // Show notification for speed change
     const speedLabels = {
@@ -347,10 +609,6 @@ speedSelect.addEventListener("change", function() {
     
     console.log(`Playback speed changed to ${speedLabels[this.value]}`);
 });
-
-// =========================
-// ⭐ Additional Professional Features
-// =========================
 
 // Handle fullscreen change to update button icon
 document.addEventListener("fullscreenchange", updateFullscreenButton);
@@ -388,22 +646,22 @@ document.addEventListener("keydown", function(e) {
     // Spacebar to play/pause (native video controls)
     if (e.code === "Space" && e.target === document.body) {
         e.preventDefault();
-        if (video.paused) {
-            video.play();
+        if (videoPlayer.paused) {
+            videoPlayer.play();
         } else {
-            video.pause();
+            videoPlayer.pause();
         }
     }
     
     // Arrow keys for seeking
     if (e.code === "ArrowRight" && e.target === document.body) {
         e.preventDefault();
-        video.currentTime += 10; // Skip forward 10 seconds
+        videoPlayer.currentTime += 10; // Skip forward 10 seconds
     }
     
     if (e.code === "ArrowLeft" && e.target === document.body) {
         e.preventDefault();
-        video.currentTime -= 10; // Skip backward 10 seconds
+        videoPlayer.currentTime -= 10; // Skip backward 10 seconds
     }
 });
 </script>
