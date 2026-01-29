@@ -1,24 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Delusyon</title>
 <style>
+/* ============================================
+   TIMER PAGE STYLES
+============================================ */
+.timer-page {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.timer-container {
+    max-width: 400px; /* Reduced from 600px */
+    width: 90%;
+    text-align: center;
+    padding: 25px; /* Reduced from 40px */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.timer-title {
+    font-size: 26px; /* Reduced from 32px */
+    margin-bottom: 15px; /* Reduced from 20px */
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.timer-subtitle {
+    font-size: 15px; /* Reduced from 18px */
+    color: #ddd;
+    margin-bottom: 20px; /* Reduced from 30px */
+    line-height: 1.4;
+}
+
+.timer-display {
+    font-size: 52px; /* Reduced from 72px */
+    font-weight: 700;
+    margin: 20px 0; /* Reduced from 30px */
+    text-shadow: 0 0 20px rgba(255, 65, 108, 0.7);
+    color: #fff;
+}
+
+.timer-label {
+    font-size: 16px; /* Reduced from 20px */
+    color: #96c93d;
+    margin-bottom: 25px; /* Reduced from 40px */
+}
+
+.watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px; /* Reduced from 12px */
+    padding: 14px 30px; /* Reduced from 18px 40px */
+    font-size: 17px; /* Reduced from 20px */
+    font-weight: 700;
+    background: linear-gradient(to right, #8E2DE2, #4A00E0);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(142, 45, 226, 0.4);
+    margin: 15px 0; /* Reduced from 20px */
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.watch-btn.active {
+    opacity: 1;
+    pointer-events: auto;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+    animation: pulse 2s infinite;
+}
+
+.watch-btn.active:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 65, 108, 0.6);
+}
+
+.watch-btn:active {
+    transform: translateY(0);
+}
+
+.watch-btn i {
+    font-size: 20px; /* Reduced from 24px */
+}
+
+.skip-note {
+    color: #aaa;
+    font-size: 13px; /* Reduced from 14px */
+    margin-top: 12px; /* Reduced from 15px */
+}
+
+.timer-status {
+    font-size: 15px; /* Reduced from 18px */
+    margin-top: 15px; /* Reduced from 20px */
+    min-height: 24px; /* Reduced from 27px */
+    color: #96c93d;
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px; /* Reduced from 8px */
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin: 20px 0; /* Reduced from 30px */
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    width: 0%;
+    border-radius: 3px;
+    transition: width 1s linear;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+    }
+    100% {
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+    }
+}
+
+/* ============================================
+   VIDEO PLAYER PAGE STYLES (Hidden Initially)
+============================================ */
+.video-page {
+    display: none;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    padding: 20px;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
 }
 
 /* Header with Home Button */
@@ -27,35 +174,35 @@ body {
     justify-content: space-between;
     align-items: center;
     max-width: 900px;
-    margin: 0 auto 25px;
+    margin: 0 auto 20px; /* Reduced from 25px */
     padding: 0 10px;
 }
 
 .logo-area {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px; /* Reduced from 15px */
 }
 
 .home-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
+    gap: 6px; /* Reduced from 8px */
+    padding: 9px 16px; /* Reduced from 10px 18px */
     background: linear-gradient(to right, #4A00E0, #8E2DE2);
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px; /* Reduced from 16px */
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(142, 45, 226, 0.3);
+    box-shadow: 0 4px 12px rgba(142, 45, 226, 0.3);
 }
 
 .home-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(142, 45, 226, 0.4);
+    box-shadow: 0 6px 18px rgba(142, 45, 226, 0.4);
 }
 
 .home-btn:active {
@@ -63,11 +210,11 @@ body {
 }
 
 .home-btn i {
-    font-size: 18px;
+    font-size: 16px; /* Reduced from 18px */
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 26px; /* Reduced from 28px */
     font-weight: 700;
     background: linear-gradient(to right, #FF416C, #FF4B2B);
     -webkit-background-clip: text;
@@ -81,9 +228,9 @@ h1 {
 .video-container {
     max-width: 900px;
     margin: 0 auto;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
     background: #000;
     position: relative;
 }
@@ -97,30 +244,30 @@ video {
 /* Controls */
 .controls {
     max-width: 900px;
-    margin: 20px auto 0;
+    margin: 15px auto 0; /* Reduced from 20px */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px; /* Reduced from 15px */
     padding: 0 10px;
 }
 
 .control-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
+    gap: 6px; /* Reduced from 8px */
+    padding: 10px 18px; /* Reduced from 12px 20px */
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px; /* Reduced from 16px */
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .control-btn i {
-    font-size: 18px;
+    font-size: 16px; /* Reduced from 18px */
 }
 
 #fsBtn {
@@ -130,13 +277,13 @@ video {
 
 #fsBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 176, 155, 0.4);
+    box-shadow: 0 6px 12px rgba(0, 176, 155, 0.4);
 }
 
 select {
-    padding: 12px 20px;
+    padding: 10px 18px; /* Reduced from 12px 20px */
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px; /* Reduced from 16px */
     font-weight: 600;
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -158,30 +305,31 @@ select option {
 /* Movie Overview */
 .movie-overview {
     max-width: 900px;
-    margin: 25px auto;
-    padding: 20px;
+    margin: 20px auto; /* Reduced from 25px */
+    padding: 18px; /* Reduced from 20px */
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     border-left: 4px solid #FF416C;
 }
 
 .movie-overview h3 {
-    margin-bottom: 15px;
+    margin-bottom: 12px; /* Reduced from 15px */
     color: #96c93d;
-    font-size: 22px;
+    font-size: 20px; /* Reduced from 22px */
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* Reduced from 10px */
 }
 
 .movie-overview h3 i {
     color: #FF4B2B;
+    font-size: 18px; /* Added smaller icon */
 }
 
 .movie-overview p {
-    line-height: 1.7;
+    line-height: 1.6;
     color: #ddd;
-    font-size: 16px;
+    font-size: 15px; /* Reduced from 16px */
     text-align: left;
 }
 
@@ -189,7 +337,7 @@ select option {
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
-        gap: 15px;
+        gap: 12px; /* Reduced from 15px */
     }
     
     .controls {
@@ -199,8 +347,21 @@ select option {
     
     .control-btn, select {
         width: 100%;
-        max-width: 300px;
+        max-width: 280px; /* Reduced from 300px */
         justify-content: center;
+    }
+    
+    .timer-display {
+        font-size: 46px; /* Reduced from 60px */
+    }
+    
+    .timer-title {
+        font-size: 24px; /* Reduced from 28px */
+    }
+    
+    .timer-container {
+        max-width: 350px;
+        padding: 20px;
     }
 }
 
@@ -210,16 +371,38 @@ select option {
     }
     
     .home-btn, .control-btn, select {
-        padding: 10px 15px;
-        font-size: 15px;
+        padding: 8px 14px; /* Reduced from 10px 15px */
+        font-size: 14px; /* Reduced from 15px */
     }
     
     .movie-overview h3 {
-        font-size: 20px;
+        font-size: 18px; /* Reduced from 20px */
     }
     
     .movie-overview p {
-        font-size: 15px;
+        font-size: 14px; /* Reduced from 15px */
+    }
+    
+    .timer-display {
+        font-size: 42px; /* Reduced from 48px */
+    }
+    
+    .timer-title {
+        font-size: 22px; /* Reduced from 24px */
+    }
+    
+    .timer-container {
+        padding: 20px 15px; /* Reduced from 30px 20px */
+        width: 95%;
+    }
+    
+    .watch-btn {
+        padding: 12px 24px; /* Reduced from 15px 30px */
+        font-size: 16px; /* Reduced from 18px */
+    }
+    
+    .timer-subtitle {
+        font-size: 14px; /* Reduced from 15px */
     }
 }
 </style>
@@ -227,65 +410,159 @@ select option {
 </head>
 <body>
 
-<div class="header">
-    <div class="logo-area">
-        <button class="home-btn" id="homeBtn">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
+<!-- ============================================
+     TIMER PAGE (Visible Initially)
+============================================ -->
+<div class="timer-page" id="timerPage">
+    <div class="timer-container">
+        <h1 class="timer-title">Delusyon</h1>
+        <p class="timer-subtitle">Get ready to watch the full movie. Please wait for the timer to complete, then click the "Watch Now" button.</p>
+        
+        <div class="timer-display" id="timer">5</div>
+        <p class="timer-label">Seconds Remaining</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <button class="watch-btn" id="watchBtn">
+            <i class="fas fa-play-circle"></i>
+            <span>Watch Now</span>
         </button>
+        
+        <p class="skip-note">Button will be enabled after the timer reaches zero</p>
+        <p class="timer-status" id="timerStatus">Please wait...</p>
     </div>
-    <h1>Delusyon</h1>
-    <div class="logo-area"></div> <!-- Empty for symmetry -->
 </div>
 
-<div class="video-container">
-    <video id="player" controls playsinline webkit-playsinline>
-        <source src="https://ia800904.us.archive.org/12/items/Delusyon/Delusyon.ia.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-</div>
+<!-- ============================================
+     VIDEO PLAYER PAGE (Hidden Initially)
+============================================ -->
+<div class="video-page" id="videoPage">
+    <div class="header">
+        <div class="logo-area">
+            <button class="home-btn" id="homeBtn">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+        </div>
+        <h1>Delusyon</h1>
+        <div class="logo-area"></div> <!-- Empty for symmetry -->
+    </div>
 
-<div class="controls">
-    <button class="control-btn" id="fsBtn">
-        <i class="fas fa-expand"></i>
-        <span>Fullscreen</span>
-    </button>
+    <div class="video-container">
+        <video id="player" controls playsinline webkit-playsinline>
+            <source src="https://ia800904.us.archive.org/12/items/Delusyon/Delusyon.ia.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
 
-    <select id="speed">
-        <option value="1">Speed: Normal</option>
-        <option value="0.5">0.5x (Slow)</option>
-        <option value="1.25">1.25x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2">2x (Fast)</option>
-    </select>
-</div>
+    <div class="controls">
+        <button class="control-btn" id="fsBtn">
+            <i class="fas fa-expand"></i>
+            <span>Fullscreen</span>
+        </button>
 
-<div class="movie-overview">
-    <h3><i class="fas fa-film"></i> Movie Overview</h3>
-    <p>A desperate wife whose husband is shot after a robbery attempt. Desperate to help him financially, she turns to Kap, a man who's always been interested in her, sparking an affair that shatters their relationships</p>
+        <select id="speed">
+            <option value="1">Speed: Normal</option>
+            <option value="0.5">0.5x (Slow)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x (Fast)</option>
+        </select>
+    </div>
+
+    <div class="movie-overview">
+        <h3><i class="fas fa-film"></i> Movie Overview</h3>
+        <p>A desperate wife whose husband is shot after a robbery attempt. Desperate to help him financially, she turns to Kap, a man who's always been interested in her, sparking an affair that shatters their relationships.</p>
+    </div>
 </div>
 
 <script>
-// =========================
-// ⭐ Variables
-// =========================
-const video = document.getElementById("player");
+// ============================================
+// TIMER PAGE FUNCTIONALITY
+// ============================================
+const timerPage = document.getElementById('timerPage');
+const videoPage = document.getElementById('videoPage');
+const timerDisplay = document.getElementById('timer');
+const watchBtn = document.getElementById('watchBtn');
+const timerStatus = document.getElementById('timerStatus');
+const progressBar = document.getElementById('progressBar');
+let countdown = 5;
+let timerInterval;
+
+function startTimer() {
+    // Initial setup
+    timerDisplay.textContent = countdown;
+    progressBar.style.width = '0%';
+    
+    // Start the timer
+    timerInterval = setInterval(() => {
+        countdown--;
+        timerDisplay.textContent = countdown;
+        
+        // Update progress bar
+        const progress = ((5 - countdown) / 5) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        // When timer reaches 0
+        if (countdown <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = '0';
+            progressBar.style.width = '100%';
+            enableWatchButton();
+        }
+    }, 1000);
+}
+
+function enableWatchButton() {
+    watchBtn.classList.add('active');
+    timerStatus.textContent = 'Ready! Click "Watch Now" to proceed';
+    
+    // Add click event to button
+    watchBtn.addEventListener('click', function() {
+        // Open ad in new tab (REPLACE WITH YOUR ACTUAL AD URL)
+        window.open('https://otieu.com/4/8257954', '_blank');
+        
+        // Show video page and hide timer page
+        timerPage.style.display = 'none';
+        videoPage.style.display = 'block';
+        
+        // Start video playback
+        setTimeout(() => {
+            if (videoPlayer && typeof videoPlayer.play === 'function') {
+                videoPlayer.play().catch(e => console.log('Auto-play prevented:', e));
+            }
+        }, 500);
+    });
+}
+
+// Start timer when page loads
+window.addEventListener('load', startTimer);
+
+// Keyboard shortcut (Enter key)
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && watchBtn.classList.contains('active')) {
+        e.preventDefault();
+        watchBtn.click();
+    }
+});
+
+// ============================================
+// VIDEO PLAYER FUNCTIONALITY
+// ============================================
+const videoPlayer = document.getElementById("player");
 const homeBtn = document.getElementById("homeBtn");
 const fsBtn = document.getElementById("fsBtn");
 const speedSelect = document.getElementById("speed");
 let wakeLock = null;
 
-// =========================
-// ⭐ Home Button Functionality - FIXED
-// =========================
+// Home Button Functionality
 homeBtn.addEventListener("click", function() {
-    // Remove the alert and uncomment the actual navigation line
-    window.location.href = "https://watch.boldilocks.xyz/";
+    window.location.href = "https://boldilocks.xyz/";
 });
 
-// =========================
-// ⭐ Prevent Screen Sleep
-// =========================
+// Prevent Screen Sleep
 async function requestWakeLock() {
     if ('wakeLock' in navigator) {
         try {
@@ -297,9 +574,9 @@ async function requestWakeLock() {
     }
 }
 
-video.addEventListener("play", requestWakeLock);
+videoPlayer.addEventListener("play", requestWakeLock);
 
-video.addEventListener("pause", () => {
+videoPlayer.addEventListener("pause", () => {
     if (wakeLock !== null) {
         wakeLock.release();
         wakeLock = null;
@@ -307,7 +584,7 @@ video.addEventListener("pause", () => {
     }
 });
 
-video.addEventListener("ended", () => {
+videoPlayer.addEventListener("ended", () => {
     if (wakeLock !== null) {
         wakeLock.release();
         wakeLock = null;
@@ -315,26 +592,22 @@ video.addEventListener("ended", () => {
     }
 });
 
-// =========================
-// ⭐ Fullscreen Button
-// =========================
+// Fullscreen Button
 fsBtn.addEventListener("click", () => {
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-    } else if (video.mozRequestFullScreen) {
-        video.mozRequestFullScreen();
-    } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+    if (videoPlayer.requestFullscreen) {
+        videoPlayer.requestFullscreen();
+    } else if (videoPlayer.webkitRequestFullscreen) {
+        videoPlayer.webkitRequestFullscreen();
+    } else if (videoPlayer.mozRequestFullScreen) {
+        videoPlayer.mozRequestFullScreen();
+    } else if (videoPlayer.msRequestFullscreen) {
+        videoPlayer.msRequestFullscreen();
     }
 });
 
-// =========================
-// ⭐ Playback Speed
-// =========================
+// Playback Speed
 speedSelect.addEventListener("change", function() {
-    video.playbackRate = parseFloat(this.value);
+    videoPlayer.playbackRate = parseFloat(this.value);
     
     // Show notification for speed change
     const speedLabels = {
@@ -347,10 +620,6 @@ speedSelect.addEventListener("change", function() {
     
     console.log(`Playback speed changed to ${speedLabels[this.value]}`);
 });
-
-// =========================
-// ⭐ Additional Professional Features
-// =========================
 
 // Handle fullscreen change to update button icon
 document.addEventListener("fullscreenchange", updateFullscreenButton);
@@ -388,22 +657,22 @@ document.addEventListener("keydown", function(e) {
     // Spacebar to play/pause (native video controls)
     if (e.code === "Space" && e.target === document.body) {
         e.preventDefault();
-        if (video.paused) {
-            video.play();
+        if (videoPlayer.paused) {
+            videoPlayer.play();
         } else {
-            video.pause();
+            videoPlayer.pause();
         }
     }
     
     // Arrow keys for seeking
     if (e.code === "ArrowRight" && e.target === document.body) {
         e.preventDefault();
-        video.currentTime += 10; // Skip forward 10 seconds
+        videoPlayer.currentTime += 10; // Skip forward 10 seconds
     }
     
     if (e.code === "ArrowLeft" && e.target === document.body) {
         e.preventDefault();
-        video.currentTime -= 10; // Skip backward 10 seconds
+        videoPlayer.currentTime -= 10; // Skip backward 10 seconds
     }
 });
 </script>
