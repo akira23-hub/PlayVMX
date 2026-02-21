@@ -1,61 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mayumi</title>
 <style>
-/* Reset and Base Styles */
+/* ============================================
+   TIMER PAGE STYLES (unchanged layout)
+============================================ */
+.timer-page {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.timer-container {
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.timer-title {
+    font-size: 26px;
+    margin-bottom: 15px;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.timer-subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.timer-display {
+    font-size: 52px;
+    font-weight: 700;
+    margin: 20px 0;
+    text-shadow: 0 0 20px rgba(255, 65, 108, 0.7);
+    color: #fff;
+}
+
+.timer-label {
+    font-size: 16px;
+    color: #96c93d;
+    margin-bottom: 25px;
+}
+
+.watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 30px;
+    font-size: 17px;
+    font-weight: 700;
+    background: linear-gradient(to right, #8E2DE2, #4A00E0);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(142, 45, 226, 0.4);
+    margin: 15px 0;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.watch-btn.active {
+    opacity: 1;
+    pointer-events: auto;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+    animation: pulse 2s infinite;
+}
+
+.watch-btn.active:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 65, 108, 0.6);
+}
+
+.watch-btn:active {
+    transform: translateY(0);
+}
+
+.watch-btn i {
+    font-size: 20px;
+}
+
+.skip-note {
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+.timer-status {
+    font-size: 15px;
+    margin-top: 15px;
+    min-height: 24px;
+    color: #96c93d;
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    width: 0%;
+    border-radius: 3px;
+    transition: width 1s linear;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4); }
+    50% { box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7); }
+    100% { box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4); }
+}
+
+/* ============================================
+   VIDEO PLAYER PAGE – FIXED HEIGHT PLAYER
+============================================ */
+.video-page {
+    display: none;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    padding: 20px;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-/* Header with Home Button */
+/* Header unchanged */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 900px;
-    margin: 0 auto 25px;
+    margin: 0 auto 20px;
     padding: 0 10px;
 }
 
 .logo-area {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .home-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
+    gap: 6px;
+    padding: 9px 16px;
     background: linear-gradient(to right, #4A00E0, #8E2DE2);
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(142, 45, 226, 0.3);
+    box-shadow: 0 4px 12px rgba(142, 45, 226, 0.3);
 }
 
 .home-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(142, 45, 226, 0.4);
+    box-shadow: 0 6px 18px rgba(142, 45, 226, 0.4);
 }
 
 .home-btn:active {
@@ -63,11 +203,11 @@ body {
 }
 
 .home-btn i {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     background: linear-gradient(to right, #FF416C, #FF4B2B);
     -webkit-background-clip: text;
@@ -77,50 +217,58 @@ h1 {
     margin: 0;
 }
 
-/* Video Container */
+/* ========== FIXED HEIGHT VIDEO CONTAINER ========== */
 .video-container {
     max-width: 900px;
     margin: 0 auto;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
     background: #000;
     position: relative;
+    
+    /* --- FIXED HEIGHT: 450px (adjust as needed) --- */
+    height: 450px;
+    width: 100%;
 }
 
+/* video element now fills the fixed container */
 video {
     width: 100%;
+    height: 100%;
     display: block;
     outline: none;
+    object-fit: contain;  /* ensures full video visible without cropping, black bars if aspect differs */
+    background: #000;
 }
 
-/* Controls */
+/* Controls & movie overview unchanged */
 .controls {
     max-width: 900px;
-    margin: 20px auto 0;
+    margin: 15px auto 0;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px;
     padding: 0 10px;
 }
 
 .control-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
+    gap: 6px;
+    padding: 10px 18px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .control-btn i {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 #fsBtn {
@@ -130,13 +278,13 @@ video {
 
 #fsBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 176, 155, 0.4);
+    box-shadow: 0 6px 12px rgba(0, 176, 155, 0.4);
 }
 
 select {
-    padding: 12px 20px;
+    padding: 10px 18px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -155,52 +303,56 @@ select option {
     color: white;
 }
 
-/* Movie Overview */
 .movie-overview {
     max-width: 900px;
-    margin: 25px auto;
-    padding: 20px;
+    margin: 20px auto;
+    padding: 18px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     border-left: 4px solid #FF416C;
 }
 
 .movie-overview h3 {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     color: #96c93d;
-    font-size: 22px;
+    font-size: 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .movie-overview h3 i {
     color: #FF4B2B;
+    font-size: 18px;
 }
 
 .movie-overview p {
-    line-height: 1.7;
+    line-height: 1.6;
     color: #ddd;
-    font-size: 16px;
+    font-size: 15px;
     text-align: left;
 }
 
-/* Responsive Design */
+/* Responsive tweaks */
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
-        gap: 15px;
+        gap: 12px;
     }
-    
     .controls {
         flex-direction: column;
         align-items: center;
     }
-    
     .control-btn, select {
         width: 100%;
-        max-width: 300px;
+        max-width: 280px;
         justify-content: center;
+    }
+    .timer-display {
+        font-size: 46px;
+    }
+    .video-container {
+        height: 350px;   /* smaller on tablets */
     }
 }
 
@@ -208,18 +360,21 @@ select option {
     h1 {
         font-size: 22px;
     }
-    
     .home-btn, .control-btn, select {
-        padding: 10px 15px;
-        font-size: 15px;
+        padding: 8px 14px;
+        font-size: 14px;
     }
-    
     .movie-overview h3 {
-        font-size: 20px;
+        font-size: 18px;
     }
-    
     .movie-overview p {
-        font-size: 15px;
+        font-size: 14px;
+    }
+    .timer-display {
+        font-size: 42px;
+    }
+    .video-container {
+        height: 250px;   /* smaller on mobile */
     }
 }
 </style>
@@ -227,132 +382,270 @@ select option {
 </head>
 <body>
 
-<div class="header">
-    <div class="logo-area">
-        <button class="home-btn" id="homeBtn">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
+<!-- TIMER PAGE (Visible Initially) -->
+<div class="timer-page" id="timerPage">
+    <div class="timer-container">
+        <h1 class="timer-title">Mayumi</h1>
+        <p class="timer-subtitle">Get ready to watch the full movie. Please wait for the timer to complete, then click the "Watch Now" button.</p>
+        
+        <div class="timer-display" id="timer">5</div>
+        <p class="timer-label">Seconds Remaining</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <button class="watch-btn" id="watchBtn">
+            <i class="fas fa-play-circle"></i>
+            <span>Watch Now</span>
         </button>
+        
+        <p class="skip-note">Button will be enabled after the timer reaches zero</p>
+        <p class="timer-status" id="timerStatus">Please wait...</p>
     </div>
-    <h1>Mayumi</h1>
-    <div class="logo-area"></div> <!-- Empty for symmetry -->
 </div>
 
-<div class="video-container">
-    <video id="player" controls playsinline webkit-playsinline>
-        <source src="https://ia801908.us.archive.org/4/items/mayumi_202511/MAYUMI%202025%20720p.VMAX.WEB-DL.AAC.x264.ENG.SUB.THR.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-</div>
+<!-- VIDEO PLAYER PAGE (Hidden Initially) with FIXED HEIGHT container -->
+<div class="video-page" id="videoPage">
+    <div class="header">
+        <div class="logo-area">
+            <button class="home-btn" id="homeBtn">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+        </div>
+        <h1>Mayumi</h1>
+        <div class="logo-area"></div>
+    </div>
 
-<div class="controls">
-    <button class="control-btn" id="fsBtn">
-        <i class="fas fa-expand"></i>
-        <span>Fullscreen</span>
-    </button>
+    <!-- Fixed height container (450px by default, responsive) -->
+    <div class="video-container">
+        <!-- ================================================================ -->
+        <!-- MP4 SOURCE - NO AUTOPLAY ATTRIBUTE (will play after click) -->
+        <!-- ================================================================ -->
+        
+        <!-- OPTION 1: MP4 SOURCE (autoplay removed - will be triggered by JS) -->
+        
+        <video id="player" controls playsinline webkit-playsinline>
+            <source src="https://ia801908.us.archive.org/4/items/mayumi_202511/MAYUMI%202025%20720p.VMAX.WEB-DL.AAC.x264.ENG.SUB.THR.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+        
+        
+        <!-- OPTION 2: IFRAME SOURCE (comment out when using MP4) -->
+        <!-- 
+        <iframe id="embedPlayer" src="https://ia600901.us.archive.org/9/items/Ligaw/Ligaw.2025.VMX.1080P.HD.WEB-DL_18PlusOnly%20%281%29%20%281%29.ia.mp4" width="100%" height="100%" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+        -->
+        
+    </div>
 
-    <select id="speed">
-        <option value="1">Speed: Normal</option>
-        <option value="0.5">0.5x (Slow)</option>
-        <option value="1.25">1.25x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2">2x (Fast)</option>
-    </select>
-</div>
+    <div class="controls">
+        <button class="control-btn" id="fsBtn">
+            <i class="fas fa-expand"></i>
+            <span>Fullscreen</span>
+        </button>
 
-<div class="movie-overview">
-    <h3><i class="fas fa-film"></i> Movie Overview</h3>
-    <p>A woman awakens desire in her friend, igniting his sexual journey. Their growing emotional bond brings both heartache and personal growth.</p>
+        <select id="speed">
+            <option value="1">Speed: Normal</option>
+            <option value="0.5">0.5x (Slow)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x (Fast)</option>
+        </select>
+    </div>
+
+    <div class="movie-overview">
+        <h3><i class="fas fa-film"></i>Movie Overview</h3>
+        <p>A woman awakens desire in her friend, igniting his sexual journey. Their growing emotional bond brings both heartache and personal growth.</p>
+    </div>
 </div>
 
 <script>
-// =========================
-// ⭐ Variables
-// =========================
-const video = document.getElementById("player");
+// ============================================
+// TIMER PAGE FUNCTIONALITY
+// ============================================
+const timerPage = document.getElementById('timerPage');
+const videoPage = document.getElementById('videoPage');
+const timerDisplay = document.getElementById('timer');
+const watchBtn = document.getElementById('watchBtn');
+const timerStatus = document.getElementById('timerStatus');
+const progressBar = document.getElementById('progressBar');
+let countdown = 5;
+let timerInterval;
+
+function startTimer() {
+    timerDisplay.textContent = countdown;
+    progressBar.style.width = '0%';
+    
+    timerInterval = setInterval(() => {
+        countdown--;
+        timerDisplay.textContent = countdown;
+        
+        const progress = ((5 - countdown) / 5) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        if (countdown <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = '0';
+            progressBar.style.width = '100%';
+            enableWatchButton();
+        }
+    }, 1000);
+}
+
+function enableWatchButton() {
+    watchBtn.classList.add('active');
+    timerStatus.textContent = 'Ready! Click "Watch Now" to proceed';
+    
+    watchBtn.addEventListener('click', function() {
+        // Open ad in new tab
+        window.open('https://omg10.com/4/8236017', '_blank');
+        
+        // Show video page and hide timer page
+        timerPage.style.display = 'none';
+        videoPage.style.display = 'block';
+        
+        // NOW play the video (after user clicks Watch Now)
+        setTimeout(() => {
+            const videoPlayer = document.getElementById("player");
+            if (videoPlayer) {
+                // Ensure video is not muted
+                videoPlayer.muted = false;
+                
+                // Play the video
+                const playPromise = videoPlayer.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Play with sound prevented:", error);
+                        // Show a message that user needs to click
+                        const status = document.createElement('div');
+                        status.style.position = 'fixed';
+                        status.style.bottom = '20px';
+                        status.style.left = '50%';
+                        status.style.transform = 'translateX(-50%)';
+                        status.style.background = 'rgba(255,65,108,0.9)';
+                        status.style.color = 'white';
+                        status.style.padding = '10px 20px';
+                        status.style.borderRadius = '30px';
+                        status.style.zIndex = '2000';
+                        status.style.fontWeight = 'bold';
+                        status.style.cursor = 'pointer';
+                        status.innerHTML = '🔊 Click here to play with sound';
+                        document.body.appendChild(status);
+                        
+                        // Play when user clicks the message
+                        status.addEventListener('click', function() {
+                            videoPlayer.play();
+                            status.remove();
+                        });
+                        
+                        // Also try playing on any click
+                        const playOnClick = () => {
+                            videoPlayer.play();
+                            document.removeEventListener('click', playOnClick);
+                            if (status) status.remove();
+                        };
+                        document.addEventListener('click', playOnClick);
+                        
+                        // Remove after 5 seconds
+                        setTimeout(() => {
+                            if (status) status.remove();
+                            document.removeEventListener('click', playOnClick);
+                        }, 5000);
+                    });
+                }
+            }
+        }, 500);
+    });
+}
+
+window.addEventListener('load', startTimer);
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && watchBtn.classList.contains('active')) {
+        e.preventDefault();
+        watchBtn.click();
+    }
+});
+
+// ============================================
+// VIDEO PLAYER FUNCTIONALITY
+// ============================================
+const videoPlayer = document.getElementById("player");
+const embedPlayer = document.getElementById("embedPlayer");
 const homeBtn = document.getElementById("homeBtn");
 const fsBtn = document.getElementById("fsBtn");
 const speedSelect = document.getElementById("speed");
 let wakeLock = null;
 
-// =========================
-// ⭐ Home Button Functionality - FIXED
-// =========================
-homeBtn.addEventListener("click", function() {
-    // Remove the alert and uncomment the actual navigation line
-    window.location.href = "https://watch.boldilocks.xyz/";
-});
-
-// =========================
-// ⭐ Prevent Screen Sleep
-// =========================
-async function requestWakeLock() {
-    if ('wakeLock' in navigator) {
-        try {
-            wakeLock = await navigator.wakeLock.request("screen");
-            console.log("Wake Lock activated to prevent screen sleep");
-        } catch (err) {
-            console.log(`Error activating wake lock: ${err.name}, ${err.message}`);
-        }
-    }
+// If we're using the iframe embed (commented out by default)
+if (embedPlayer) {
+    speedSelect.disabled = true;
+    speedSelect.style.opacity = "0.5";
+    speedSelect.title = "Speed control not available for embedded player";
 }
 
-video.addEventListener("play", requestWakeLock);
-
-video.addEventListener("pause", () => {
-    if (wakeLock !== null) {
-        wakeLock.release();
-        wakeLock = null;
-        console.log("Wake Lock released");
-    }
+// Home Button
+homeBtn.addEventListener("click", function() {
+    window.location.href = "https://boldilocks.xyz/";
 });
 
-video.addEventListener("ended", () => {
-    if (wakeLock !== null) {
-        wakeLock.release();
-        wakeLock = null;
-        console.log("Wake Lock released");
+// Wake lock for video player
+if (videoPlayer) {
+    async function requestWakeLock() {
+        if ('wakeLock' in navigator) {
+            try {
+                wakeLock = await navigator.wakeLock.request("screen");
+                console.log("Wake Lock activated");
+            } catch (err) {
+                console.log(`Wake Lock error: ${err.message}`);
+            }
+        }
     }
-});
 
-// =========================
-// ⭐ Fullscreen Button
-// =========================
+    videoPlayer.addEventListener("play", requestWakeLock);
+
+    videoPlayer.addEventListener("pause", () => {
+        if (wakeLock !== null) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+    });
+
+    videoPlayer.addEventListener("ended", () => {
+        if (wakeLock !== null) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+    });
+}
+
+// Fullscreen
 fsBtn.addEventListener("click", () => {
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-    } else if (video.mozRequestFullScreen) {
-        video.mozRequestFullScreen();
-    } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+    const container = document.querySelector('.video-container');
+    const player = document.getElementById("player") || document.getElementById("embedPlayer");
+    
+    if (container.requestFullscreen) {
+        container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+    } else if (container.mozRequestFullScreen) {
+        container.mozRequestFullScreen();
+    } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+    } else if (player && player.requestFullscreen) {
+        player.requestFullscreen();
     }
 });
 
-// =========================
-// ⭐ Playback Speed
-// =========================
-speedSelect.addEventListener("change", function() {
-    video.playbackRate = parseFloat(this.value);
-    
-    // Show notification for speed change
-    const speedLabels = {
-        "0.5": "0.5x (Slow)",
-        "1": "Normal",
-        "1.25": "1.25x",
-        "1.5": "1.5x",
-        "2": "2x (Fast)"
-    };
-    
-    console.log(`Playback speed changed to ${speedLabels[this.value]}`);
-});
+// Playback speed
+if (speedSelect && videoPlayer) {
+    speedSelect.addEventListener("change", function() {
+        videoPlayer.playbackRate = parseFloat(this.value);
+    });
+}
 
-// =========================
-// ⭐ Additional Professional Features
-// =========================
-
-// Handle fullscreen change to update button icon
+// Fullscreen button text update
 document.addEventListener("fullscreenchange", updateFullscreenButton);
 document.addEventListener("webkitfullscreenchange", updateFullscreenButton);
 document.addEventListener("mozfullscreenchange", updateFullscreenButton);
@@ -371,41 +664,45 @@ function updateFullscreenButton() {
     }
 }
 
-// Keyboard shortcuts for better UX
+// Keyboard shortcuts
 document.addEventListener("keydown", function(e) {
-    // F key for fullscreen
     if (e.code === "KeyF" && e.target === document.body) {
         e.preventDefault();
         fsBtn.click();
     }
-    
-    // Home key for home button
     if (e.code === "Home" && e.target === document.body) {
         e.preventDefault();
         homeBtn.click();
     }
     
-    // Spacebar to play/pause (native video controls)
+    // Space play/pause
     if (e.code === "Space" && e.target === document.body) {
         e.preventDefault();
-        if (video.paused) {
-            video.play();
-        } else {
-            video.pause();
+        if (videoPlayer) {
+            videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
         }
     }
     
-    // Arrow keys for seeking
+    // Seek
     if (e.code === "ArrowRight" && e.target === document.body) {
         e.preventDefault();
-        video.currentTime += 10; // Skip forward 10 seconds
+        if (videoPlayer) {
+            videoPlayer.currentTime += 10;
+        }
     }
-    
     if (e.code === "ArrowLeft" && e.target === document.body) {
         e.preventDefault();
-        video.currentTime -= 10; // Skip backward 10 seconds
+        if (videoPlayer) {
+            videoPlayer.currentTime -= 10;
+        }
     }
 });
+
+// Preload the video but DON'T autoplay
+if (videoPlayer) {
+    videoPlayer.load();
+    videoPlayer.muted = false; // Ensure it's not muted
+}
 </script>
 </body>
 </html>
